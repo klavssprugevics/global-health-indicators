@@ -1,15 +1,21 @@
 local function sendClientScripts()
-    AddCSLuaFile("autorun/rmv_load_scripts.lua")
-
+    AddCSLuaFile("autorun/ghi_load_scripts.lua")
+    AddCSLuaFile("shared/ghi_network_strings.lua")
+    AddCSLuaFile("client/ghi_cl_receiver.lua")
+    AddCSLuaFile("client/vgui/ghi_health_panel.lua")
 end
 
 local function loadServerScripts()
-    include("server/rhi_sv_init.lua")
+    include("shared/ghi_network_strings.lua")
+    include("server/ghi_sv_manager.lua")
 end
 
 local function loadClientScripts()
-    include("client/rhi_cl_init.lua")
+    include("shared/ghi_network_strings.lua")
+    include("client/ghi_cl_receiver.lua")
+    include("client/vgui/ghi_health_panel.lua")
 end
+
 
 if SERVER then
     sendClientScripts()
