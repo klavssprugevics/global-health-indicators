@@ -12,17 +12,8 @@ local c_health_bg = Color(61, 61, 61, 200)
 local c_health = Color(241, 78, 78, 200)
 local c_text_alive = Color(255, 255, 255, 255)
 local c_text_dead = Color(255, 0, 0)
+local c_text_healing = Color(140, 255, 0)
 
-
-function printInfo()
-    print("##############################")
-    PrintTable(GHI_HEALTH_INFO.playerDead)
-    print("----------------------")
-    PrintTable(GHI_HEALTH_INFO.playerHealth)
-    print("----------------------")
-    PrintTable(GHI_HEALTH_INFO.playerDamageHistory)
-    print("##############################")
-end
 
 local function drawBackground()
     surface.SetDrawColor(c_background)
@@ -33,7 +24,7 @@ local function drawNameTag(ply, counter)
     surface.SetFont("GHINameFont")
     if ply:Alive() then surface.SetTextColor(c_text_alive) else surface.SetTextColor(c_text_dead) end
     surface.SetTextPos(START_X + PADDING + 5, START_Y + PADDING + counter * (BAR_HEIGHT + PADDING))
-    local name = string.rep(ply:Name(), 10, "")
+    local name = ply:Name()
     if string.len(name) > 10 then
         name = string.sub(name, 0, 10) .. ".."
     end
@@ -46,10 +37,12 @@ local function drawHealthText(ply, counter)
     surface.SetTextPos(START_X + PADDING + 120, START_Y + 12 + counter * (BAR_HEIGHT + PADDING))
     local health = GHI_HEALTH_INFO.playerHealth[ply]
     local healthLabel = health
-    if health < 100 then 
-        healthLabel = "  " .. healthLabel 
+    if health <= 0 then
+        healthLabel = "   0"
     elseif health < 10 then
         healthLabel = "   " .. healthLabel
+    elseif health < 100 then 
+        healthLabel = "  " .. healthLabel 
     end
     surface.DrawText(healthLabel)
 end
@@ -59,9 +52,17 @@ local function drawDamageText(ply, counter)
     surface.SetFont("GHIHealthFont")
     if ply:Alive() then surface.SetTextColor(c_text_alive) else surface.SetTextColor(c_text_dead) end
     local damage = GHI_HEALTH_INFO.playerDamageHistory[ply]
-    local xOffset = 35 + 11 * string.len(damage)
+    local xOffset = 42 + 11 * string.len(damage)
+    if damage < 0 then 
+        xOffset = 42 + 9 * (string.len(damage) - 1)
+    end
     surface.SetTextPos(START_X + WIDTH - xOffset, START_Y + 12 + counter * (BAR_HEIGHT + PADDING))
-    local damageLabel = "(-" .. damage .. ")"
+    local damageLabel = "("
+    if damage > 0 then
+        surface.SetTextColor(c_text_healing)
+        damageLabel = damageLabel .. "+" 
+    end
+    damageLabel = damageLabel .. damage .. ")"
     surface.DrawText(damageLabel)
 end
 
@@ -73,7 +74,6 @@ local function drawHealthBackground(ply, counter)
 end
 
 local function drawHealth(ply, counter)
-    if GHI_HEALTH_INFO.playerHealth[ply] == nil then return end
     local healthPercentage = GHI_HEALTH_INFO.playerHealth[ply] / 100 * (WIDTH - PADDING * 2)
     surface.SetDrawColor(c_health)
     surface.DrawRect(START_X + PADDING, START_Y + PADDING + counter * (BAR_HEIGHT + PADDING), 
@@ -85,9 +85,12 @@ local function drawPlayerInfo(ply, counter)
     drawHealth(ply, counter)
 end
 
+
 hook.Add("HUDPaint", "ghi_draw_health_panel", function()
+    if table.IsEmpty(GHI_HEALTH_INFO.playerHealth) then return end
     drawBackground()
     for i, ply in pairs(player.GetAll()) do
+        if GHI_HEALTH_INFO.playerHealth[ply] == nil then continue end
         drawPlayerInfo(ply, i - 1)
         drawNameTag(ply, i - 1)
         drawHealthText(ply, i - 1)
