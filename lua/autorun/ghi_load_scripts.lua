@@ -1,5 +1,6 @@
 local function sendClientScripts()
     AddCSLuaFile("autorun/ghi_load_scripts.lua")
+    AddCSLuaFile("client/ghi_configuration.lua")
     AddCSLuaFile("shared/ghi_network_strings.lua")
     AddCSLuaFile("client/vgui/ghi_fonts.lua")
     AddCSLuaFile("client/ghi_cl_receiver.lua")
@@ -12,6 +13,7 @@ local function loadServerScripts()
 end
 
 local function loadClientScripts()
+    include("client/ghi_configuration.lua")
     include("shared/ghi_network_strings.lua")
     include("client/vgui/ghi_fonts.lua")
     include("client/ghi_cl_receiver.lua")
