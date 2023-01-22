@@ -14,7 +14,10 @@ local c_text_alive = Color(255, 255, 255, 255)
 local c_text_dead = Color(255, 0, 0)
 local c_text_healing = Color(140, 255, 0)
 
-
+local function drawBackground()
+    surface.SetDrawColor(c_background)
+    surface.DrawRect(START_X, START_Y, WIDTH, #player.GetAll() * (BAR_HEIGHT + PADDING) + PADDING)
+end
 
 local function drawNameTag(ply, counter)
     surface.SetFont("GHINameFont")
@@ -86,6 +89,7 @@ hook.Add("HUDPaint", "ghi_draw_health_panel", function()
     if not GetConVar("ghi_enabled"):GetBool() then return end
     if table.IsEmpty(GHI_HEALTH_INFO.playerHealth) then return end
     for i, ply in pairs(player.GetAll()) do
+        if i == 1 then drawBackground() end
         if GHI_HEALTH_INFO.playerHealth[ply] == nil then continue end
         drawPlayerInfo(ply, i - 1)
         drawNameTag(ply, i - 1)
