@@ -27,7 +27,7 @@ Global Health Indicators is a simple Gmod addon to display the health of everyon
 
 
 ## Links
-[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2894778408)
+[Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=2921839782)
 
 ## Known issues
 - [TTT] If there's only one person on the server as a spectator, the background would still be drawn.
