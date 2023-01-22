@@ -1,4 +1,4 @@
-# Global Healh Indicators (GHI)
+# Global Health Indicators (GHI)
 <p align="center">
     <img src="images/logo.png" alt="Logo" width="200"/>
 <p>
@@ -23,7 +23,7 @@ Global Health Indicators is a simple Gmod addon to display the health of everyon
 
 **Server:**
 - **ghi_sv_enabled 0/1** - Toggles the health monitoring on the server-side. 
-- **ghi_sv_console_log 0/1** - Toggles damage loggin in the server console.
+- **ghi_sv_console_log 0/1** - Toggles damage logging in the server console.
 
 
 ## Links
